@@ -1,0 +1,29 @@
+{
+  "name": "wertheim-cipher",
+  "version": "1.0.0",
+  "description": "WERTHEIM text encryption cipher — browser TypeScript port",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "echo 'Open test/test.html in a browser to run tests.'"
+  },
+  "keywords": [
+    "wertheim",
+    "cipher",
+    "encryption",
+    "hinta",
+    "mfi"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
