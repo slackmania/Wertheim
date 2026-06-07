@@ -1,71 +1,119 @@
-# WERTHEIM — Browser Encryption Tool / Böngészős Titkosító
+<p align="center">
+  <img src="https://img.shields.io/badge/status-stable-brightgreen" alt="Status">
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
+  <img src="https://img.shields.io/badge/platform-browser-important" alt="Platform">
+  <img src="https://img.shields.io/badge/size-95%20kB-lightgrey" alt="Size">
+</p>
 
-**[EN]** A single HTML file. No installation, no npm, no dependencies.
-Just open `wertheim.html` in any browser and start encrypting.
-
-**[HU]** Egyetlen HTML fájl. Nincs telepítés, nincs npm, nincs függőség.
-Csak nyisd meg `wertheim.html`-t bármely böngészőben, és máris használhatod.
-
----
-
-## Quick Start / Gyors indítás
-
-**[EN]**
-1. Double-click `wertheim.html`
-2. Enter a password
-3. Type your text → **Encrypt**
-
-**[HU]**
-1. Dupla kattintás a `wertheim.html`-re
-2. Írd be a jelszót
-3. Írd be a szöveget → **Titkosítás**
+<h1 align="center">🔐 WERTHEIM</h1>
+<p align="center"><b>Browser-based text encryption</b><br>
+Zero-install · No server · .wtx compatible</p>
 
 ---
 
-## Compatibility / Kompatibilitás
+A single **standalone HTML file** — no build tools, no npm, no dependencies. Double-click and encrypt.
 
-**[EN]** Fully compatible with `.wtx` files from the original Pascal program:
-what you encrypt with this HTML, the Pascal version can decrypt, and vice versa.
-
-**[HU]** Teljes mértékben kompatibilis az eredeti Pascal program `.wtx` fájljaival:
-amit ezzel a HTML-lel titkosítasz, azt a Pascal verzió is visszafejti, és fordítva.
-
----
-
-## How It Works / Működés
-
-- SHA-1 hash: Web Crypto API (browser built-in, hardware-accelerated)
-- RC4 encryption: native JS implementation
-- Custom "hinta" substitution cipher
-- Custom Base64 (non-standard — Pascal compatible)
+```
+─────  Encryption Pipeline  ─────
+Plaintext → UTF-8 → RC4 + SHA-1 → 
+Base64 → Hinta substitution → Ciphertext (.wtx)
+```
 
 ---
 
-## Documentation / Dokumentáció
+## ✨ Features
 
-### English / Angol
-
-| File | Description |
-|------|-------------|
-| `USER_MANUAL.en.md` | Complete user manual — all features explained |
-| `TECHNICAL_DOCS.en.md` | Technical documentation — encryption pipeline, security analysis |
-| `SOCIAL.en.md` | Short social media post (English) |
-
-### Hungarian / Magyar
-
-| Fájl | Leírás |
-|------|--------|
-| `USER_MANUAL.md` | Felhasználói kézikönyv — minden funkció részletes leírása |
-| `TECHNICAL_DOCS.md` | Technikai dokumentáció — titkosítási lánc, komponensek, biztonság |
-| `FACEBOOK.md` | Rövid ismertető Facebookra |
+| Feature | |
+|---------|-|
+| **🔒 Encrypt / 🔓 Decrypt** | Password-based text encryption |
+| **📂 File I/O** | Open and save `.txt` / `.wtx` files |
+| **📋 Clipboard** | Copy, paste, copy-all with headers |
+| **📎 Drag & Drop** | Drop files anywhere on the page |
+| **🔄 .wtx auto-decode** | Opens and decrypts `.wtx` files in one step |
+| **⌨️ Full editor** | Tab=3 spaces, INS/OVR toggle, line/col tracking |
 
 ---
 
-## Files / Fájlok
+## 🚀 Get started
 
-| File / Fájl | Role / Szerep |
-|-------------|---------------|
-| `wertheim.html` | **✅ The only file you need to open / Az egyetlen fájl, amit meg kell nyitni** |
-| `src/` | TypeScript source (optional, for development) |
-| `test/` | Tests (not needed for usage) |
-| `CPP_transcode/` | C++ port (incomplete, no compiler available) |
+```
+1. Download  wertheim.html
+2. Double-click to open in your browser
+3. Enter a password
+4. Type text → click  🔒 Encrypt
+```
+
+That's it. Everything runs locally — **no data ever leaves your machine**.
+
+---
+
+## 🔧 Technical stack
+
+| Component | Implementation |
+|-----------|---------------|
+| SHA-1 | Web Crypto API (hardware-accelerated) |
+| Encryption | RC4 (native JS) |
+| Substitution | "Hinta" — custom permutation cipher (2 rounds) |
+| Encoding | Custom Base64 (Pascal-compatible alphabet) |
+| Language | JavaScript in a single `.html` file |
+| Source | TypeScript in `src/` |
+
+---
+
+## 📁 Repository structure
+
+```
+wertheim/
+├── wertheim.html          ← The app (just open this)
+├── TS_transcode/
+│   ├── src/               TypeScript source
+│   ├── test/              Tests (npm test)
+│   ├── USER_MANUAL.md     User manual (HU)
+│   ├── USER_MANUAL.en.md  User manual (EN)
+│   ├── TECHNICAL_DOCS.md  Technical docs (HU)
+│   ├── TECHNICAL_DOCS.en.md Technical docs (EN)
+│   └── FACEBOOK.md        Social post (HU)
+├── CPP_transcode/         C++ port (incomplete)
+├── hinta.pas              Pascal original
+├── titokrutin.pas         Pascal original
+└── unit1.pas              Pascal original
+```
+
+---
+
+## 📚 Documentation
+
+- [User Manual (EN)](TS_transcode/USER_MANUAL.en.md)
+- [User Manual (HU)](TS_transcode/USER_MANUAL.md)
+- [Technical Documentation (EN)](TS_transcode/TECHNICAL_DOCS.en.md)
+- [Technical Documentation (HU)](TS_transcode/TECHNICAL_DOCS.md)
+
+---
+
+## 🧪 Tests
+
+Open the app, click **🧪 Tesztek** in the status bar, or run:
+
+```bash
+cd TS_transcode
+npm install
+npm test
+```
+
+All 5 tests pass: Base64 round-trip · Basic encrypt/decrypt · Hungarian UTF-8 · Long text (1000 chars) · Wrong password rejection.
+
+---
+
+## 🤝 Contributing
+
+PRs welcome. The main deliverable is `wertheim.html` — the TypeScript sources are in `src/` and are compiled into it manually.
+
+---
+
+## 📜 License
+
+MIT — do what you want with it.
+
+---
+
+<p align="center"><i>Built from the original Pascal program by MFI Office Services Kft.</i></p>
