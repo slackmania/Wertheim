@@ -43,6 +43,33 @@
     #testResults { display: none; }
     #fileInfo { font-size: 12px; color: #888; }
     .hidden { display: none !important; }
+
+    /* ── Editor container for search highlight overlay ── */
+    .editor-container { position: relative; flex: 1; min-height: 0; display: flex; }
+    .editor-highlight, .editor-textarea {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        padding: .5em; border: none; border-radius: 4px;
+        font-family: 'Consolas', monospace; font-size: 14px;
+        line-height: 1.4; white-space: pre-wrap; word-wrap: break-word;
+        overflow: auto;
+    }
+    .editor-highlight { background: #16213e; color: transparent; z-index: 1; pointer-events: none; }
+    .editor-highlight mark { background: #e9ff70; color: #000; border-radius: 2px; }
+    .editor-highlight mark.current { background: #ffb347; }
+    .editor-textarea { background: transparent; color: transparent; caret-color: #eee; z-index: 2; resize: none; outline: none; tab-size: 3; }
+
+    /* ── Search bar ── */
+    .search-bar { display: flex; align-items: center; gap: .3em; margin: .2em 0; padding: .3em .5em; background: #0f3460; border-radius: 4px; }
+    .search-bar input { flex: 1; background: #16213e; color: #eee; border: 1px solid #2a2a4a; border-radius: 3px; padding: .25em .5em; font-size: 13px; outline: none; }
+    .search-bar input:focus { border-color: #e94560; }
+    .search-bar span { color: #aaa; font-size: 12px; min-width: 3em; text-align: center; }
+    .search-bar button { background: #16213e; color: #ccc; border: 1px solid #2a2a4a; padding: .2em .5em; border-radius: 3px; cursor: pointer; font-size: 12px; }
+    .search-bar button:hover { background: #1a4a80; color: #fff; }
+
+    /* ── Maximize toggle ── */
+    .maximized .editor-panel-ct { display: none !important; }
+    .maximized .sep-ct { display: none !important; }
+    .maximized .heading-ct { display: none !important; }
 </style>
 </head>
 <body>
@@ -91,16 +118,29 @@
     <button id="btnPtCopy">📋 Másolás</button>
     <button id="btnPtPaste">📋 Beillesztés</button>
     <button id="btnPtClear">🗑 Törlés</button>
+    <button id="btnPtCleanBreaks" title="Felesleges soremelések törlése">↩ Törlés</button>
+    <button id="btnPtSearch" title="Keresés (Ctrl+F)">🔍 Keresés</button>
+    <button id="btnPtMaximize" title="Teljes magasság">⛶ Nagyítás</button>
     <span style="flex:1"></span>
     <span id="fileInfo"></span>
 </div>
+<div id="ptSearchBar" class="search-bar hidden">
+    <input id="ptSearchInput" type="text" placeholder="Keresés...">
+    <span id="ptSearchCount">0/0</span>
+    <button id="ptSearchPrev">▲</button>
+    <button id="ptSearchNext">▼</button>
+    <button id="ptSearchClose">✕</button>
+</div>
 <div class="editor-panel">
-    <textarea id="plaintext" placeholder="Ide írd a titkosítandó szöveget..." spellcheck="false"></textarea>
+    <div class="editor-container">
+        <div class="editor-highlight" id="ptHighlight"><pre id="ptHighlightPre"><br></pre></div>
+        <textarea id="plaintext" class="editor-textarea" placeholder="Ide írd a titkosítandó szöveget..." spellcheck="false"></textarea>
+    </div>
 </div>
 
-<hr class="sep">
+<hr class="sep sep-ct">
 
-<h2 id="headingCt">🔐 Titkosított</h2>
+<h2 id="headingCt" class="heading-ct">🔐 Titkosított</h2>
 <div class="toolbar">
     <button id="btnCtOpen">📂 Megnyitás</button>
     <button id="btnCtSave">💾 Mentés</button>
@@ -108,7 +148,7 @@
     <button id="btnCtPaste">📋 Beillesztés</button>
     <button id="btnCtClear">🗑 Törlés</button>
 </div>
-<div class="editor-panel">
+<div class="editor-panel editor-panel-ct">
     <textarea id="ciphertext" placeholder="...itt jelenik meg a titkosított szöveg..." spellcheck="false"></textarea>
 </div>
 
@@ -368,7 +408,9 @@ const LANG = {
     newConfirm: "Biztosan törlöd a tartalmat?",
     posFormat: "Sor: {line}  Oszlop: {col}",
     copied: "✅ Másolva", copyAllDone: "✅ Mindet másolva",
-    error: "❌ HIBA:", filePrefix: "📄", saveDefaultPt: "dokumentum", saveDefaultCt: "titkosított"
+    error: "❌ HIBA:", filePrefix: "📄", saveDefaultPt: "dokumentum", saveDefaultCt: "titkosított",
+    cleanBreaks: "↩ Törlés", maximize: "⛶ Nagyítás", maximizeTitle: "Teljes magasság", cleanBreaksTitle: "Felesleges soremelések törlése",
+    searchPlaceholder: "Keresés...", searchCount: "{n}/{total}"
   },
   en: {
     pageTitle: "WERTHEIM Encryptor",
@@ -390,7 +432,9 @@ const LANG = {
     newConfirm: "Are you sure you want to clear all content?",
     posFormat: "Line: {line}  Col: {col}",
     copied: "✅ Copied", copyAllDone: "✅ All copied",
-    error: "❌ ERROR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "encrypted"
+    error: "❌ ERROR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "encrypted",
+    cleanBreaks: "↩ Clean", maximize: "⛶ Maximize", maximizeTitle: "Full height", cleanBreaksTitle: "Remove extra line breaks",
+    searchPlaceholder: "Search...", searchCount: "{n}/{total}"
   },
   de: {
     pageTitle: "WERTHEIM Verschlüsseler",
@@ -412,7 +456,9 @@ const LANG = {
     newConfirm: "Wirklich den gesamten Inhalt löschen?",
     posFormat: "Zeile: {line}  Spalte: {col}",
     copied: "✅ Kopiert", copyAllDone: "✅ Alles kopiert",
-    error: "❌ FEHLER:", filePrefix: "📄", saveDefaultPt: "dokument", saveDefaultCt: "verschlüsselt"
+    error: "❌ FEHLER:", filePrefix: "📄", saveDefaultPt: "dokument", saveDefaultCt: "verschlüsselt",
+    cleanBreaks: "↩ Bereinigen", maximize: "⛶ Maximieren", maximizeTitle: "Volle Höhe", cleanBreaksTitle: "Überflüssige Zeilenumbrüche entfernen",
+    searchPlaceholder: "Suchen...", searchCount: "{n}/{total}"
   },
   fr: {
     pageTitle: "WERTHEIM Chiffreur",
@@ -434,7 +480,9 @@ const LANG = {
     newConfirm: "Voulez-vous vraiment effacer tout le contenu?",
     posFormat: "Ligne: {line}  Col: {col}",
     copied: "✅ Copié", copyAllDone: "✅ Tout copié",
-    error: "❌ ERREUR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "chiffré"
+    error: "❌ ERREUR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "chiffré",
+    cleanBreaks: "↩ Nettoyer", maximize: "⛶ Agrandir", maximizeTitle: "Pleine hauteur", cleanBreaksTitle: "Supprimer les sauts de ligne superflus",
+    searchPlaceholder: "Rechercher...", searchCount: "{n}/{total}"
   },
   ru: {
     pageTitle: "WERTHEIM Шифратор",
@@ -456,7 +504,9 @@ const LANG = {
     newConfirm: "Вы уверены, что хотите очистить всё содержимое?",
     posFormat: "Строка: {line}  Столбец: {col}",
     copied: "✅ Скопировано", copyAllDone: "✅ Всё скопировано",
-    error: "❌ ОШИБКА:", filePrefix: "📄", saveDefaultPt: "документ", saveDefaultCt: "зашифрованный"
+    error: "❌ ОШИБКА:", filePrefix: "📄", saveDefaultPt: "документ", saveDefaultCt: "зашифрованный",
+    cleanBreaks: "↩ Очистить", maximize: "⛶ Развернуть", maximizeTitle: "На весь экран", cleanBreaksTitle: "Удалить лишние переносы строк",
+    searchPlaceholder: "Поиск...", searchCount: "{n}/{total}"
   },
   ar: {
     pageTitle: "WERTHEIM مشفر",
@@ -478,7 +528,9 @@ const LANG = {
     newConfirm: "هل أنت متأكد من مسح كل المحتوى؟",
     posFormat: "سطر: {line}  عمود: {col}",
     copied: "✅ تم النسخ", copyAllDone: "✅ تم نسخ الكل",
-    error: "❌ خطأ:", filePrefix: "📄", saveDefaultPt: "مستند", saveDefaultCt: "مشفر"
+    error: "❌ خطأ:", filePrefix: "📄", saveDefaultPt: "مستند", saveDefaultCt: "مشفر",
+    cleanBreaks: "↩ مسح", maximize: "⛶ تكبير", maximizeTitle: "ارتفاع كامل", cleanBreaksTitle: "إزالة فواصل الأسطر الزائدة",
+    searchPlaceholder: "بحث...", searchCount: "{n}/{total}"
   }
 };
 
@@ -518,6 +570,13 @@ function setLanguage(lang) {
   $("btnPwToggle").title = t.pwToggleTitle;
   $("btnRunTests").textContent = t.tests;
   $("btnRunTests").title = t.testsTitle;
+  $("btnPtCleanBreaks").textContent = t.cleanBreaks;
+  $("btnPtCleanBreaks").title = t.cleanBreaksTitle;
+  $("btnPtSearch").textContent = "🔍 " + (lang === "hu" ? "Keresés" : lang === "en" ? "Search" : lang === "de" ? "Suchen" : lang === "fr" ? "Rechercher" : lang === "ru" ? "Поиск" : "بحث");
+  $("btnPtSearch").title = t.searchPlaceholder;
+  $("btnPtMaximize").textContent = t.maximize;
+  $("btnPtMaximize").title = t.maximizeTitle;
+  $("ptSearchInput").placeholder = t.searchPlaceholder;
   updatePos($("plaintext"));
   localStorage.setItem("wertheim_lang", lang);
 }
@@ -558,7 +617,8 @@ async function dec() {
         const pw = $("password").value.trim();
         if (!pw) return;
         $("plaintext").value = await hintaki($("ciphertext").value, pw);
-    } catch (e) { $("plaintext").value = LANG[currentLang].error + " " + e.message; }
+        syncHighlight();
+    } catch (e) { $("plaintext").value = LANG[currentLang].error + " " + e.message; syncHighlight(); }
 }
 function swap() {
     const t = $("plaintext").value;
@@ -668,7 +728,8 @@ $("fileInput").addEventListener("change", async e => {
         $("plaintext").value = text;
         $("fileInfo").textContent = LANG[currentLang].filePrefix + " " + file.name + " (" + file.size + " bájt)";
         updatePos($("plaintext"));
-    } catch (err) { $("plaintext").value = LANG[currentLang].error + " " + err.message; }
+        syncHighlight();
+    } catch (err) { $("plaintext").value = LANG[currentLang].error + " " + err.message; syncHighlight(); }
     e.target.value = "";
 });
 
@@ -689,6 +750,7 @@ $("fileInputCt").addEventListener("change", async e => {
                 try {
                     const decrypted = await hintaki(text, pw);
                     $("plaintext").value = decrypted;
+                    syncHighlight();
                 } catch (_) { /* keep ciphertext visible */ }
             }
         }
@@ -747,11 +809,11 @@ $("btnCtCopy").addEventListener("click", () => copyText($("ciphertext").value, $
 async function pasteText(ta) {
     try {
         const text = await navigator.clipboard.readText();
-        // Insert at cursor or replace selection
         const start = ta.selectionStart, end = ta.selectionEnd;
         ta.value = ta.value.substring(0, start) + text + ta.value.substring(end);
         ta.selectionStart = ta.selectionEnd = start + text.length;
         updatePos(ta);
+        if (ta.id === "plaintext") syncHighlight();
     } catch (e) { /* silent */ }
 }
 
@@ -760,8 +822,146 @@ $("btnCtPaste").addEventListener("click", () => pasteText($("ciphertext")));
 
 // ── Clear ─────────────────────────────────────────────────────
 
-$("btnPtClear").addEventListener("click", () => { $("plaintext").value = ""; updatePos($("plaintext")); });
+$("btnPtClear").addEventListener("click", () => { $("plaintext").value = ""; updatePos($("plaintext")); syncHighlight(); });
 $("btnCtClear").addEventListener("click", () => { $("ciphertext").value = ""; updatePos($("ciphertext")); });
+
+// ── Maximize toggle ──────────────────────────────────────────
+
+let ptMaximized = false;
+$("btnPtMaximize").addEventListener("click", () => {
+    ptMaximized = !ptMaximized;
+    document.body.classList.toggle("maximized", ptMaximized);
+});
+
+// ── Search toggle ──────────────────────────────────────────────
+
+$("btnPtSearch").addEventListener("click", () => {
+    $("ptSearchBar").classList.toggle("hidden");
+    if (!$("ptSearchBar").classList.contains("hidden")) {
+        $("ptSearchInput").focus();
+        $("ptSearchInput").select();
+    }
+});
+
+// ── Clean breaks ─────────────────────────────────────────────
+
+$("btnPtCleanBreaks").addEventListener("click", () => {
+    const ta = $("plaintext");
+    let t = ta.value.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    t = t.replace(/\n{3,}/g, "\n\n");
+    ta.value = t;
+    updatePos(ta);
+    syncHighlight();
+});
+
+// ── Search with highlight overlay ────────────────────────────
+
+let ptMatches = [];
+let ptMatchIdx = -1;
+
+function syncHighlight() {
+    const ta = $("plaintext");
+    const hl = $("ptHighlightPre");
+    const text = ta.value;
+    const query = $("ptSearchInput").value;
+    if (!query || text.indexOf(query) === -1) {
+        hl.textContent = text || "\n";
+        ptMatches = [];
+        ptMatchIdx = -1;
+        $("ptSearchCount").textContent = "0/0";
+        return;
+    }
+    ptMatches = [];
+    let idx = 0, start = 0;
+    const lowerText = text.toLowerCase();
+    const lowerQ = query.toLowerCase();
+    while ((idx = lowerText.indexOf(lowerQ, start)) !== -1) {
+        ptMatches.push(idx);
+        start = idx + query.length;
+    }
+    let html = "";
+    let last = 0;
+    const ci = ptMatchIdx >= 0 && ptMatchIdx < ptMatches.length ? ptMatches[ptMatchIdx] : -1;
+    for (const m of ptMatches) {
+        html += escHtml(text.substring(last, m));
+        html += m === ci ? "<mark class=\"current\">" : "<mark>";
+        html += escHtml(text.substring(m, m + query.length));
+        html += "</mark>";
+        last = m + query.length;
+    }
+    html += escHtml(text.substring(last));
+    hl.innerHTML = html || "<br>";
+    const n = ptMatchIdx >= 0 ? ptMatchIdx + 1 : 0;
+    const total = ptMatches.length;
+    $("ptSearchCount").textContent = LANG[currentLang].searchCount.replace("{n}", n).replace("{total}", total);
+}
+
+function escHtml(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function scrollHighlight() {
+    const ta = $("plaintext");
+    const hl = $("ptHighlight");
+    hl.scrollTop = ta.scrollTop;
+    hl.scrollLeft = ta.scrollLeft;
+}
+
+$("plaintext").addEventListener("input", () => { syncHighlight(); updatePos($("plaintext")); });
+$("plaintext").addEventListener("scroll", scrollHighlight);
+
+$("ptSearchInput").addEventListener("input", () => {
+    ptMatchIdx = -1;
+    syncHighlight();
+});
+
+$("ptSearchInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        if (e.shiftKey) $("ptSearchPrev").click();
+        else $("ptSearchNext").click();
+    }
+    if (e.key === "Escape") { $("ptSearchClose").click(); }
+});
+
+$("ptSearchNext").addEventListener("click", () => {
+    if (ptMatches.length === 0) return;
+    ptMatchIdx = (ptMatchIdx + 1) % ptMatches.length;
+    const ta = $("plaintext");
+    const pos = ptMatches[ptMatchIdx];
+    ta.focus();
+    ta.setSelectionRange(pos, pos + $("ptSearchInput").value.length);
+    syncHighlight();
+});
+
+$("ptSearchPrev").addEventListener("click", () => {
+    if (ptMatches.length === 0) return;
+    ptMatchIdx = (ptMatchIdx - 1 + ptMatches.length) % ptMatches.length;
+    const ta = $("plaintext");
+    const pos = ptMatches[ptMatchIdx];
+    ta.focus();
+    ta.setSelectionRange(pos, pos + $("ptSearchInput").value.length);
+    syncHighlight();
+});
+
+$("ptSearchClose").addEventListener("click", () => {
+    $("ptSearchBar").classList.add("hidden");
+    $("ptSearchInput").value = "";
+    ptMatches = [];
+    ptMatchIdx = -1;
+    syncHighlight();
+    $("plaintext").focus();
+});
+
+// Ctrl+F to open search
+document.addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+        e.preventDefault();
+        $("ptSearchBar").classList.remove("hidden");
+        $("ptSearchInput").focus();
+        $("ptSearchInput").select();
+    }
+});
 
 // ── Drag & drop ───────────────────────────────────────────────
 
@@ -785,17 +985,18 @@ document.addEventListener("drop", async e => {
     const file = e.dataTransfer.files[0];
     if (!file) return;
     try {
-        const text = await file.text();
-        // Check extension: .wtx → ciphertext, else → plaintext
-        if (file.name.toLowerCase().endsWith(".wtx")) {
-            $("ciphertext").value = text;
-            const pw = $("password").value.trim();
-            if (pw) {
-                try { $("plaintext").value = await hintaki(text, pw); } catch (_) {}
-            }
-        } else {
-            $("plaintext").value = text;
+    const text = await file.text();
+    // Check extension: .wtx → ciphertext, else → plaintext
+    if (file.name.toLowerCase().endsWith(".wtx")) {
+        $("ciphertext").value = text;
+        const pw = $("password").value.trim();
+        if (pw) {
+            try { $("plaintext").value = await hintaki(text, pw); syncHighlight(); } catch (_) {}
         }
+    } else {
+        $("plaintext").value = text;
+        syncHighlight();
+    }
         $("fileInfo").textContent = LANG[currentLang].filePrefix + " " + file.name + " (" + file.size + " bájt)";
     } catch (err) { /* silent */ }
 });
@@ -842,6 +1043,7 @@ $("langSelector").value = savedLang;
 setLanguage(savedLang);
 updateButtons();
 updatePos($("plaintext"));
+syncHighlight();
 console.log("WERTHEIM betöltve.");
 </script>
 </body>
