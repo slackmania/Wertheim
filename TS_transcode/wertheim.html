@@ -98,6 +98,7 @@
     <input type="password" id="password" placeholder="Jelszó megadása kötelező" spellcheck="false" autofocus>
     <button id="btnPwToggle" class="sec" style="padding:.4em .7em;font-size:13px;" title="Jelszó megjelenítése/elrejtése">👁</button>
 </div>
+<p id="firstStepMsg" style="text-align:center;color:#888;font-size:12px;margin:-.2em 0 .2em;font-style:italic;">A jelszó megadása az első lépés.</p>
 
 <hr class="sep">
 
@@ -410,7 +411,7 @@ const LANG = {
     copied: "✅ Másolva", copyAllDone: "✅ Mindet másolva",
     error: "❌ HIBA:", filePrefix: "📄", saveDefaultPt: "dokumentum", saveDefaultCt: "titkosított",
     cleanBreaks: "↩ Törlés", maximize: "⛶ Nagyítás", maximizeTitle: "Teljes magasság", cleanBreaksTitle: "Felesleges soremelések törlése",
-    searchPlaceholder: "Keresés...", searchCount: "{n}/{total}"
+    searchPlaceholder: "Keresés...", searchCount: "{n}/{total}", firstStep: "A jelszó megadása az első lépés."
   },
   en: {
     pageTitle: "WERTHEIM Encryptor",
@@ -434,7 +435,7 @@ const LANG = {
     copied: "✅ Copied", copyAllDone: "✅ All copied",
     error: "❌ ERROR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "encrypted",
     cleanBreaks: "↩ Clean", maximize: "⛶ Maximize", maximizeTitle: "Full height", cleanBreaksTitle: "Remove extra line breaks",
-    searchPlaceholder: "Search...", searchCount: "{n}/{total}"
+    searchPlaceholder: "Search...", searchCount: "{n}/{total}", firstStep: "Password is the first step."
   },
   de: {
     pageTitle: "WERTHEIM Verschlüsseler",
@@ -458,7 +459,7 @@ const LANG = {
     copied: "✅ Kopiert", copyAllDone: "✅ Alles kopiert",
     error: "❌ FEHLER:", filePrefix: "📄", saveDefaultPt: "dokument", saveDefaultCt: "verschlüsselt",
     cleanBreaks: "↩ Bereinigen", maximize: "⛶ Maximieren", maximizeTitle: "Volle Höhe", cleanBreaksTitle: "Überflüssige Zeilenumbrüche entfernen",
-    searchPlaceholder: "Suchen...", searchCount: "{n}/{total}"
+    searchPlaceholder: "Suchen...", searchCount: "{n}/{total}", firstStep: "Das Passwort ist der erste Schritt."
   },
   fr: {
     pageTitle: "WERTHEIM Chiffreur",
@@ -482,7 +483,7 @@ const LANG = {
     copied: "✅ Copié", copyAllDone: "✅ Tout copié",
     error: "❌ ERREUR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "chiffré",
     cleanBreaks: "↩ Nettoyer", maximize: "⛶ Agrandir", maximizeTitle: "Pleine hauteur", cleanBreaksTitle: "Supprimer les sauts de ligne superflus",
-    searchPlaceholder: "Rechercher...", searchCount: "{n}/{total}"
+    searchPlaceholder: "Rechercher...", searchCount: "{n}/{total}", firstStep: "Le mot de passe est la première étape."
   },
   ru: {
     pageTitle: "WERTHEIM Шифратор",
@@ -506,7 +507,7 @@ const LANG = {
     copied: "✅ Скопировано", copyAllDone: "✅ Всё скопировано",
     error: "❌ ОШИБКА:", filePrefix: "📄", saveDefaultPt: "документ", saveDefaultCt: "зашифрованный",
     cleanBreaks: "↩ Очистить", maximize: "⛶ Развернуть", maximizeTitle: "На весь экран", cleanBreaksTitle: "Удалить лишние переносы строк",
-    searchPlaceholder: "Поиск...", searchCount: "{n}/{total}"
+    searchPlaceholder: "Поиск...", searchCount: "{n}/{total}", firstStep: "Пароль — первый шаг."
   },
   ar: {
     pageTitle: "WERTHEIM مشفر",
@@ -530,7 +531,7 @@ const LANG = {
     copied: "✅ تم النسخ", copyAllDone: "✅ تم نسخ الكل",
     error: "❌ خطأ:", filePrefix: "📄", saveDefaultPt: "مستند", saveDefaultCt: "مشفر",
     cleanBreaks: "↩ مسح", maximize: "⛶ تكبير", maximizeTitle: "ارتفاع كامل", cleanBreaksTitle: "إزالة فواصل الأسطر الزائدة",
-    searchPlaceholder: "بحث...", searchCount: "{n}/{total}"
+    searchPlaceholder: "بحث...", searchCount: "{n}/{total}", firstStep: "كلمة المرور هي الخطوة الأولى."
   }
 };
 
@@ -570,6 +571,7 @@ function setLanguage(lang) {
   $("btnPwToggle").title = t.pwToggleTitle;
   $("btnRunTests").textContent = t.tests;
   $("btnRunTests").title = t.testsTitle;
+  $("firstStepMsg").textContent = t.firstStep;
   $("btnPtCleanBreaks").textContent = t.cleanBreaks;
   $("btnPtCleanBreaks").title = t.cleanBreaksTitle;
   $("btnPtSearch").textContent = "🔍 " + (lang === "hu" ? "Keresés" : lang === "en" ? "Search" : lang === "de" ? "Suchen" : lang === "fr" ? "Rechercher" : lang === "ru" ? "Поиск" : "بحث");
