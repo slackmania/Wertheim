@@ -145,7 +145,7 @@ export function genhinta(pwd: string): { kod: number[]; hintar: string[]; pwdhos
     const hintar: string[] = new Array(MAX_PWD_LEN).fill("");
     for (let t = 0; t < pwdhossz && t < MAX_PWD_LEN; t++) {
         const row = kod[t];
-        const col = trimmed.charCodeAt(t);
+        const col = trimmed.charCodeAt(t) % tarr[row].length;
         if (row >= 0 && row < TARR_ROWS) {
             hintar[t] = tarr[row][col] ?? "";
         }

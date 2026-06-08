@@ -335,7 +335,7 @@ function genhinta(pwd) {
     const { kod, pwdhossz, pwdcode } = pw_to_kod(trimmed);
     const hintar = new Array(MAX_PWD_LEN).fill("");
     for (let t = 0; t < pwdhossz && t < MAX_PWD_LEN; t++) {
-        const row = kod[t], col = trimmed.charCodeAt(t);
+        const row = kod[t], col = trimmed.charCodeAt(t) % tarr[row].length;
         if (row >= 0 && row < TARR_ROWS) hintar[t] = tarr[row][col] ?? "";
     }
     return { hintar, pwdhossz };
