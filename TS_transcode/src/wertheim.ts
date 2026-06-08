@@ -1,7 +1,7 @@
 /**
  * WERTHEIM Cipher — TypeScript (Browser) Port
  *
- * Complete port of the MFI Office Services Kft. Wertheim text
+ * Complete port of the original Wertheim text
  * encryption tool. Dual-layer cipher:
  *   Layer 1: RC4 stream cipher, key = SHA1(password)
  *   Layer 2: Custom substitution cipher ("hinta") using 65×65

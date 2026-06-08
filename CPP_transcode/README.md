@@ -1,6 +1,6 @@
 # WERTHEIM Cipher — C++ Port
 
-Teljes C++ portja az MFI Office Services Kft. "Wertheim" szövegtitkosító
+Teljes C++ portja a "Wertheim" szövegtitkosító
 alkalmazása mögötti kriptográfiai rétegnek. Az eredeti kód Free Pascal
 (Lazarus) nyelven íródott, megtalálható a `../*.pas` fájlokban.
 
@@ -148,7 +148,7 @@ A core titkosítási kód (ez a C++ port) közvetlenül használható iOS-en:
 
 ## Licenc
 
-Az eredeti kód szerzője: Mihályi József, MFI Office Services Kft.
+Az eredeti kód szerzője: Mihályi József
 A C++ port az eredeti kód funkcionális megfelelője.
 
 ## Használati példa

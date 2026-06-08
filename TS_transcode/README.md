@@ -60,6 +60,19 @@ That's it. Everything runs locally — **no data ever leaves your machine**.
 
 ---
 
+## 🌐 Languages / Nyelvek
+
+| Flag | Language | UI | Manual | Technical | Social |
+|------|----------|:--:|:------:|:---------:|:------:|
+| 🇭🇺 | Magyar | ✅ | [📖](USER_MANUAL.md) | [🔧](TECHNICAL_DOCS.md) | [📣](FACEBOOK.md) |
+| 🇬🇧 | English | ✅ | [📖](USER_MANUAL.en.md) | [🔧](TECHNICAL_DOCS.en.md) | [📣](SOCIAL.en.md) |
+| 🇩🇪 | Deutsch | ✅ | [📖](USER_MANUAL.de.md) | [🔧](TECHNICAL_DOCS.de.md) | [📣](SOCIAL.de.md) |
+| 🇫🇷 | Français | ✅ | [📖](USER_MANUAL.fr.md) | [🔧](TECHNICAL_DOCS.fr.md) | [📣](SOCIAL.fr.md) |
+| 🇷🇺 | Русский | ✅ | [📖](USER_MANUAL.ru.md) | [🔧](TECHNICAL_DOCS.ru.md) | [📣](SOCIAL.ru.md) |
+| 🇸🇦 | العربية | ✅ | [📖](USER_MANUAL.ar.md) | [🔧](TECHNICAL_DOCS.ar.md) | [📣](SOCIAL.ar.md) |
+
+---
+
 ## 📁 Repository structure
 
 ```
@@ -116,4 +129,4 @@ MIT — do what you want with it.
 
 ---
 
-<p align="center"><i>Built from the original Pascal program by MFI Office Services Kft.</i></p>
+<p align="center"><i>Built from the original Pascal program.</i></p>

@@ -50,7 +50,20 @@
 <div class="app">
 
 <h1>🔐 WERTHEIM</h1>
-<p style="text-align:center;color:#aaa;font-size:13px;margin:0 0 .3em;">Szöveg titkosító — minden adat a gépen marad.</p>
+<p id="subtitle" style="text-align:center;color:#aaa;font-size:13px;margin:0 0 .3em;">Szöveg titkosító — minden adat a gépen marad.</p>
+
+<hr class="sep">
+
+<div class="pw-row" style="justify-content:flex-end;">
+    <select id="langSelector" style="background:#16213e;color:#eee;border:none;border-radius:6px;padding:.35em .6em;font-size:13px;cursor:pointer;">
+        <option value="hu">🇭🇺 Magyar</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="ru">🇷🇺 Русский</option>
+        <option value="ar">🇸🇦 العربية</option>
+    </select>
+</div>
 
 <hr class="sep">
 
@@ -71,7 +84,7 @@
 
 <hr class="sep">
 
-<h2>📄 Szöveg</h2>
+<h2 id="headingPt">📄 Szöveg</h2>
 <div class="toolbar">
     <button id="btnPtOpen">📂 Megnyitás</button>
     <button id="btnPtSave">💾 Mentés</button>
@@ -87,7 +100,7 @@
 
 <hr class="sep">
 
-<h2>🔐 Titkosított</h2>
+<h2 id="headingCt">🔐 Titkosított</h2>
 <div class="toolbar">
     <button id="btnCtOpen">📂 Megnyitás</button>
     <button id="btnCtSave">💾 Mentés</button>
@@ -108,7 +121,7 @@
     </span>
 </div>
 
-<div class="footer">WERTHEIM — MFI Office Services Kft. | C++/TS port</div>
+<div class="footer">WERTHEIM — C++/TS port</div>
 
 </div>
 
@@ -332,6 +345,183 @@ async function hintaki(mit, jelszo) {
 
 // ── UI ───────────────────────────────────────────────────────
 
+// ── i18n Translations ─────────────────────────────────────────
+
+const LANG = {
+  hu: {
+    pageTitle: "WERTHEIM titkosító",
+    subtitle: "Szöveg titkosító — minden adat a gépen marad.",
+    passwordPlaceholder: "Jelszó megadása kötelező",
+    encrypt: "🔒 Titkosítás", decrypt: "🔓 Visszafejtés", swap: "⇅ Csere",
+    copyAll: "📋 Mindent másol", newClear: "🗑 Új / Töröl",
+    headingPt: "📄 Szöveg", headingCt: "🔐 Titkosított",
+    ptOpen: "📂 Megnyitás", ptSave: "💾 Mentés", ptCopy: "📋 Másolás",
+    ptPaste: "📋 Beillesztés", ptClear: "🗑 Törlés",
+    ctOpen: "📂 Megnyitás", ctSave: "💾 Mentés", ctCopy: "📋 Másolás",
+    ctPaste: "📋 Beillesztés", ctClear: "🗑 Törlés",
+    ptPlaceholder: "Ide írd a titkosítandó szöveget...",
+    ctPlaceholder: "...itt jelenik meg a titkosított szöveg...",
+    dropOverlay: "📂 Fájl elengedés a megnyitáshoz",
+    pwToggleTitle: "Jelszó megjelenítése/elrejtése",
+    tests: "🧪 Tesztek", testsTitle: "Tesztek futtatása",
+    savePtPrompt: "Mentés fájlnévvel:", saveCtPrompt: "Mentés fájlnévvel:",
+    newConfirm: "Biztosan törlöd a tartalmat?",
+    posFormat: "Sor: {line}  Oszlop: {col}",
+    copied: "✅ Másolva", copyAllDone: "✅ Mindet másolva",
+    error: "❌ HIBA:", filePrefix: "📄", saveDefaultPt: "dokumentum", saveDefaultCt: "titkosított"
+  },
+  en: {
+    pageTitle: "WERTHEIM Encryptor",
+    subtitle: "Text encryptor — all data stays on your machine.",
+    passwordPlaceholder: "Password is required",
+    encrypt: "🔒 Encrypt", decrypt: "🔓 Decrypt", swap: "⇅ Swap",
+    copyAll: "📋 Copy All", newClear: "🗑 New / Clear",
+    headingPt: "📄 Plaintext", headingCt: "🔐 Ciphertext",
+    ptOpen: "📂 Open", ptSave: "💾 Save", ptCopy: "📋 Copy",
+    ptPaste: "📋 Paste", ptClear: "🗑 Clear",
+    ctOpen: "📂 Open", ctSave: "💾 Save", ctCopy: "📋 Copy",
+    ctPaste: "📋 Paste", ctClear: "🗑 Clear",
+    ptPlaceholder: "Enter text to encrypt...",
+    ctPlaceholder: "...encrypted text appears here...",
+    dropOverlay: "📂 Drop file to open",
+    pwToggleTitle: "Show/hide password",
+    tests: "🧪 Tests", testsTitle: "Run tests",
+    savePtPrompt: "Save as filename:", saveCtPrompt: "Save as filename:",
+    newConfirm: "Are you sure you want to clear all content?",
+    posFormat: "Line: {line}  Col: {col}",
+    copied: "✅ Copied", copyAllDone: "✅ All copied",
+    error: "❌ ERROR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "encrypted"
+  },
+  de: {
+    pageTitle: "WERTHEIM Verschlüsseler",
+    subtitle: "Textverschlüsselung — alle Daten bleiben auf Ihrem Gerät.",
+    passwordPlaceholder: "Passwort erforderlich",
+    encrypt: "🔒 Verschlüsseln", decrypt: "🔓 Entschlüsseln", swap: "⇅ Tauschen",
+    copyAll: "📋 Alles kopieren", newClear: "🗑 Neu / Löschen",
+    headingPt: "📄 Klartext", headingCt: "🔐 Geheimtext",
+    ptOpen: "📂 Öffnen", ptSave: "💾 Speichern", ptCopy: "📋 Kopieren",
+    ptPaste: "📋 Einfügen", ptClear: "🗑 Leeren",
+    ctOpen: "📂 Öffnen", ctSave: "💾 Speichern", ctCopy: "📋 Kopieren",
+    ctPaste: "📋 Einfügen", ctClear: "🗑 Leeren",
+    ptPlaceholder: "Text zum Verschlüsseln eingeben...",
+    ctPlaceholder: "...verschlüsselter Text erscheint hier...",
+    dropOverlay: "📂 Datei zum Öffnen ablegen",
+    pwToggleTitle: "Passwort anzeigen/verstecken",
+    tests: "🧪 Tests", testsTitle: "Tests ausführen",
+    savePtPrompt: "Speichern unter:", saveCtPrompt: "Speichern unter:",
+    newConfirm: "Wirklich den gesamten Inhalt löschen?",
+    posFormat: "Zeile: {line}  Spalte: {col}",
+    copied: "✅ Kopiert", copyAllDone: "✅ Alles kopiert",
+    error: "❌ FEHLER:", filePrefix: "📄", saveDefaultPt: "dokument", saveDefaultCt: "verschlüsselt"
+  },
+  fr: {
+    pageTitle: "WERTHEIM Chiffreur",
+    subtitle: "Chiffrement de texte — toutes les données restent sur votre machine.",
+    passwordPlaceholder: "Mot de passe requis",
+    encrypt: "🔒 Chiffrer", decrypt: "🔓 Déchiffrer", swap: "⇅ Échanger",
+    copyAll: "📋 Tout copier", newClear: "🗑 Nouveau / Effacer",
+    headingPt: "📄 Texte clair", headingCt: "🔐 Texte chiffré",
+    ptOpen: "📂 Ouvrir", ptSave: "💾 Enregistrer", ptCopy: "📋 Copier",
+    ptPaste: "📋 Coller", ptClear: "🗑 Effacer",
+    ctOpen: "📂 Ouvrir", ctSave: "💾 Enregistrer", ctCopy: "📋 Copier",
+    ctPaste: "📋 Coller", ctClear: "🗑 Effacer",
+    ptPlaceholder: "Entrez le texte à chiffrer...",
+    ctPlaceholder: "...le texte chiffré apparaît ici...",
+    dropOverlay: "📂 Déposez un fichier pour l'ouvrir",
+    pwToggleTitle: "Afficher/masquer le mot de passe",
+    tests: "🧪 Tests", testsTitle: "Exécuter les tests",
+    savePtPrompt: "Enregistrer sous:", saveCtPrompt: "Enregistrer sous:",
+    newConfirm: "Voulez-vous vraiment effacer tout le contenu?",
+    posFormat: "Ligne: {line}  Col: {col}",
+    copied: "✅ Copié", copyAllDone: "✅ Tout copié",
+    error: "❌ ERREUR:", filePrefix: "📄", saveDefaultPt: "document", saveDefaultCt: "chiffré"
+  },
+  ru: {
+    pageTitle: "WERTHEIM Шифратор",
+    subtitle: "Шифрование текста — все данные остаются на вашем устройстве.",
+    passwordPlaceholder: "Требуется пароль",
+    encrypt: "🔒 Зашифровать", decrypt: "🔓 Расшифровать", swap: "⇅ Поменять",
+    copyAll: "📋 Копировать всё", newClear: "🗑 Новый / Очистить",
+    headingPt: "📄 Текст", headingCt: "🔐 Зашифрованный",
+    ptOpen: "📂 Открыть", ptSave: "💾 Сохранить", ptCopy: "📋 Копировать",
+    ptPaste: "📋 Вставить", ptClear: "🗑 Очистить",
+    ctOpen: "📂 Открыть", ctSave: "💾 Сохранить", ctCopy: "📋 Копировать",
+    ctPaste: "📋 Вставить", ctClear: "🗑 Очистить",
+    ptPlaceholder: "Введите текст для шифрования...",
+    ctPlaceholder: "...зашифрованный текст появится здесь...",
+    dropOverlay: "📂 Перетащите файл для открытия",
+    pwToggleTitle: "Показать/скрыть пароль",
+    tests: "🧪 Тесты", testsTitle: "Запустить тесты",
+    savePtPrompt: "Сохранить как:", saveCtPrompt: "Сохранить как:",
+    newConfirm: "Вы уверены, что хотите очистить всё содержимое?",
+    posFormat: "Строка: {line}  Столбец: {col}",
+    copied: "✅ Скопировано", copyAllDone: "✅ Всё скопировано",
+    error: "❌ ОШИБКА:", filePrefix: "📄", saveDefaultPt: "документ", saveDefaultCt: "зашифрованный"
+  },
+  ar: {
+    pageTitle: "WERTHEIM مشفر",
+    subtitle: "تشفير النص — جميع البيانات تبقى على جهازك.",
+    passwordPlaceholder: "كلمة المرور مطلوبة",
+    encrypt: "🔒 تشفير", decrypt: "🔓 فك التشفير", swap: "⇅ تبديل",
+    copyAll: "📋 نسخ الكل", newClear: "🗑 جديد / مسح",
+    headingPt: "📄 النص الأصلي", headingCt: "🔐 النص المشفر",
+    ptOpen: "📂 فتح", ptSave: "💾 حفظ", ptCopy: "📋 نسخ",
+    ptPaste: "📋 لصق", ptClear: "🗑 مسح",
+    ctOpen: "📂 فتح", ctSave: "💾 حفظ", ctCopy: "📋 نسخ",
+    ctPaste: "📋 لصق", ctClear: "🗑 مسح",
+    ptPlaceholder: "أدخل النص المراد تشفيره...",
+    ctPlaceholder: "...النص المشفر يظهر هنا...",
+    dropOverlay: "📂 أسقط الملف لفتحه",
+    pwToggleTitle: "إظهار/إخفاء كلمة المرور",
+    tests: "🧪 اختبارات", testsTitle: "تشغيل الاختبارات",
+    savePtPrompt: "حفظ باسم:", saveCtPrompt: "حفظ باسم:",
+    newConfirm: "هل أنت متأكد من مسح كل المحتوى؟",
+    posFormat: "سطر: {line}  عمود: {col}",
+    copied: "✅ تم النسخ", copyAllDone: "✅ تم نسخ الكل",
+    error: "❌ خطأ:", filePrefix: "📄", saveDefaultPt: "مستند", saveDefaultCt: "مشفر"
+  }
+};
+
+let currentLang = "hu";
+
+function setLanguage(lang) {
+  if (!LANG[lang]) return;
+  currentLang = lang;
+  const t = LANG[lang];
+  document.title = t.pageTitle;
+  document.documentElement.lang = lang === "ar" ? "ar" : lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  $("subtitle").textContent = t.subtitle;
+  $("password").placeholder = t.passwordPlaceholder;
+  $("btnEncrypt").textContent = t.encrypt;
+  $("btnDecrypt").textContent = t.decrypt;
+  $("btnSwap").textContent = t.swap;
+  $("btnCopyAll").textContent = t.copyAll;
+  $("btnNew").textContent = t.newClear;
+  $("headingPt").textContent = t.headingPt;
+  $("headingCt").textContent = t.headingCt;
+  $("btnPtOpen").textContent = t.ptOpen;
+  $("btnPtSave").textContent = t.ptSave;
+  $("btnPtCopy").textContent = t.ptCopy;
+  $("btnPtPaste").textContent = t.ptPaste;
+  $("btnPtClear").textContent = t.ptClear;
+  $("btnCtOpen").textContent = t.ctOpen;
+  $("btnCtSave").textContent = t.ctSave;
+  $("btnCtCopy").textContent = t.ctCopy;
+  $("btnCtPaste").textContent = t.ctPaste;
+  $("btnCtClear").textContent = t.ctClear;
+  $("plaintext").placeholder = t.ptPlaceholder;
+  $("ciphertext").placeholder = t.ctPlaceholder;
+  $("dropOverlay").textContent = t.dropOverlay;
+  $("btnPwToggle").title = t.pwToggleTitle;
+  $("btnRunTests").textContent = t.tests;
+  $("btnRunTests").title = t.testsTitle;
+  updatePos($("plaintext"));
+  localStorage.setItem("wertheim_lang", lang);
+}
+
+$("langSelector").addEventListener("change", e => setLanguage(e.target.value));
+
 const $ = id => document.getElementById(id);
 
 // ── Password gate ─────────────────────────────────────────────
@@ -363,14 +553,14 @@ async function enc() {
         const pw = $("password").value.trim();
         if (!pw) return;
         $("ciphertext").value = await hintabe($("plaintext").value, pw);
-    } catch (e) { $("ciphertext").value = "❌ HIBA: " + e.message; }
+    } catch (e) { $("ciphertext").value = LANG[currentLang].error + " " + e.message; }
 }
 async function dec() {
     try {
         const pw = $("password").value.trim();
         if (!pw) return;
         $("plaintext").value = await hintaki($("ciphertext").value, pw);
-    } catch (e) { $("plaintext").value = "❌ HIBA: " + e.message; }
+    } catch (e) { $("plaintext").value = LANG[currentLang].error + " " + e.message; }
 }
 function swap() {
     const t = $("plaintext").value;
@@ -385,17 +575,18 @@ $("btnSwap").addEventListener("click", swap);
 // ── Copy All ──────────────────────────────────────────────────
 
 async function copyAll() {
+    const t = LANG[currentLang];
     const pt = $("plaintext").value;
     const ct = $("ciphertext").value;
-    const all = (pt ? "── Szöveg ──\n" + pt : "") +
+    const all = (pt ? "── " + t.headingPt.replace(/[^a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ ]/g,"").trim() + " ──\n" + pt : "") +
                 (pt && ct ? "\n\n" : "") +
-                (ct ? "── Titkosított ──\n" + ct : "");
+                (ct ? "── " + t.headingCt.replace(/[^a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ ]/g,"").trim() + " ──\n" + ct : "");
     if (!all) return;
     try {
         await navigator.clipboard.writeText(all);
         const btn = $("btnCopyAll");
         const orig = btn.textContent;
-        btn.textContent = "✅ Mindet másolva";
+        btn.textContent = t.copyAllDone;
         setTimeout(() => btn.textContent = orig, 1200);
     } catch (e) { /* silent */ }
 }
@@ -405,7 +596,7 @@ $("btnCopyAll").addEventListener("click", copyAll);
 
 $("btnNew").addEventListener("click", () => {
     if ($("plaintext").value || $("ciphertext").value) {
-        if (!confirm("Biztosan törlöd a tartalmat?")) return;
+        if (!confirm(LANG[currentLang].newConfirm)) return;
     }
     $("plaintext").value = "";
     $("ciphertext").value = "";
@@ -458,7 +649,7 @@ function updatePos(ta) {
     const line = (before.match(/\n/g) || []).length + 1;
     const lastNl = before.lastIndexOf("\n");
     const col = pos - lastNl;
-    $("posIndicator").textContent = `Sor: ${line}  Oszlop: ${col}`;
+    $("posIndicator").textContent = LANG[currentLang].posFormat.replace("{line}", line).replace("{col}", col);
 }
 
 ["plaintext", "ciphertext"].forEach(id => {
@@ -477,9 +668,9 @@ $("fileInput").addEventListener("change", async e => {
     try {
         const text = await file.text();
         $("plaintext").value = text;
-        $("fileInfo").textContent = `📄 ${file.name} (${file.size} bájt)`;
+        $("fileInfo").textContent = LANG[currentLang].filePrefix + " " + file.name + " (" + file.size + " bájt)";
         updatePos($("plaintext"));
-    } catch (err) { $("plaintext").value = "❌ HIBA: " + err.message; }
+    } catch (err) { $("plaintext").value = LANG[currentLang].error + " " + err.message; }
     e.target.value = "";
 });
 
@@ -492,7 +683,7 @@ $("fileInputCt").addEventListener("change", async e => {
     try {
         const text = await file.text();
         $("ciphertext").value = text;
-        $("fileInfo").textContent = `📄 ${file.name} (${file.size} bájt)`;
+        $("fileInfo").textContent = LANG[currentLang].filePrefix + " " + file.name + " (" + file.size + " bájt)";
         // Auto-decode .wtx if password is set
         if (file.name.toLowerCase().endsWith(".wtx")) {
             const pw = $("password").value.trim();
@@ -504,7 +695,7 @@ $("fileInputCt").addEventListener("change", async e => {
             }
         }
         updatePos($("ciphertext"));
-    } catch (err) { $("ciphertext").value = "❌ HIBA: " + err.message; }
+    } catch (err) { $("ciphertext").value = LANG[currentLang].error + " " + err.message; }
     e.target.value = "";
 });
 
@@ -521,15 +712,17 @@ function saveFile(content, suggestedName) {
 }
 
 $("btnPtSave").addEventListener("click", () => {
+    const t = LANG[currentLang];
     const text = $("plaintext").value;
     if (!text) return;
-    const name = prompt("Mentés fájlnévvel:", `dokumentum_${Date.now()}.txt`);
+    const name = prompt(t.savePtPrompt, t.saveDefaultPt + "_" + Date.now() + ".txt");
     if (name) saveFile(text, name);
 });
 $("btnCtSave").addEventListener("click", () => {
+    const t = LANG[currentLang];
     const text = $("ciphertext").value;
     if (!text) return;
-    let name = prompt("Mentés fájlnévvel:", `titkosított_${Date.now()}.wtx`);
+    let name = prompt(t.saveCtPrompt, t.saveDefaultCt + "_" + Date.now() + ".wtx");
     if (name) {
         if (!name.toLowerCase().endsWith(".wtx")) name += ".wtx";
         saveFile(text, name);
@@ -539,12 +732,13 @@ $("btnCtSave").addEventListener("click", () => {
 // ── Clipboard: Copy ───────────────────────────────────────────
 
 async function copyText(text, btn) {
+    const t = LANG[currentLang];
     try {
         await navigator.clipboard.writeText(text);
         const orig = btn.textContent;
-        btn.textContent = "✅ Másolva";
+        btn.textContent = t.copied;
         setTimeout(() => btn.textContent = orig, 1200);
-    } catch (e) { btn.textContent = "❌ Hiba"; }
+    } catch (e) { btn.textContent = t.error.replace(/[^a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ! ]/g,"").trim() || "Error"; }
 }
 
 $("btnPtCopy").addEventListener("click", () => copyText($("plaintext").value, $("btnPtCopy")));
@@ -604,7 +798,7 @@ document.addEventListener("drop", async e => {
         } else {
             $("plaintext").value = text;
         }
-        $("fileInfo").textContent = `📄 ${file.name} (${file.size} bájt)`;
+        $("fileInfo").textContent = LANG[currentLang].filePrefix + " " + file.name + " (" + file.size + " bájt)";
     } catch (err) { /* silent */ }
 });
 
@@ -645,6 +839,9 @@ $("btnRunTests").addEventListener("click", async () => {
 
 // ── Init ──────────────────────────────────────────────────────
 
+const savedLang = localStorage.getItem("wertheim_lang") || "hu";
+$("langSelector").value = savedLang;
+setLanguage(savedLang);
 updateButtons();
 updatePos($("plaintext"));
 console.log("WERTHEIM betöltve.");

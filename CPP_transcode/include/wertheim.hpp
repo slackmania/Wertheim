@@ -16,7 +16,7 @@ namespace wertheim {
 //            permutation tables derived from the password
 //
 // The original Pascal application (Lazarus / Free Pascal) was
-// a GUI text editor at MFI Office Services Kft that encrypts
+// a GUI text editor that encrypts
 // .wtx files. This C++ library replicates the exact cipher.
 //
 // Usage:

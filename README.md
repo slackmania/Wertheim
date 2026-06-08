@@ -3,6 +3,7 @@
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
   <img src="https://img.shields.io/badge/platform-browser-important" alt="Platform">
   <img src="https://img.shields.io/badge/size-95%20kB-lightgrey" alt="Size">
+  <img src="https://img.shields.io/badge/🌐-6%20languages-important" alt="Languages">
 </p>
 
 <h1 align="center">🔐 WERTHEIM</h1>
@@ -57,6 +58,19 @@ That's it. Everything runs locally — **no data ever leaves your machine**.
 | Encoding | Custom Base64 (Pascal-compatible alphabet) |
 | Language | JavaScript in a single `.html` file |
 | Source | TypeScript in `src/` |
+
+---
+
+## 🌐 Languages / Nyelvek
+
+| Flag | Language | UI | Manual | Technical | Social |
+|------|----------|:--:|:------:|:---------:|:------:|
+| 🇭🇺 | Magyar | ✅ | [📖](TS_transcode/USER_MANUAL.md) | [🔧](TS_transcode/TECHNICAL_DOCS.md) | [📣](TS_transcode/FACEBOOK.md) |
+| 🇬🇧 | English | ✅ | [📖](TS_transcode/USER_MANUAL.en.md) | [🔧](TS_transcode/TECHNICAL_DOCS.en.md) | [📣](TS_transcode/SOCIAL.en.md) |
+| 🇩🇪 | Deutsch | ✅ | [📖](TS_transcode/USER_MANUAL.de.md) | [🔧](TS_transcode/TECHNICAL_DOCS.de.md) | [📣](TS_transcode/SOCIAL.de.md) |
+| 🇫🇷 | Français | ✅ | [📖](TS_transcode/USER_MANUAL.fr.md) | [🔧](TS_transcode/TECHNICAL_DOCS.fr.md) | [📣](TS_transcode/SOCIAL.fr.md) |
+| 🇷🇺 | Русский | ✅ | [📖](TS_transcode/USER_MANUAL.ru.md) | [🔧](TS_transcode/TECHNICAL_DOCS.ru.md) | [📣](TS_transcode/SOCIAL.ru.md) |
+| 🇸🇦 | العربية | ✅ | [📖](TS_transcode/USER_MANUAL.ar.md) | [🔧](TS_transcode/TECHNICAL_DOCS.ar.md) | [📣](TS_transcode/SOCIAL.ar.md) |
 
 ---
 
@@ -116,4 +130,4 @@ MIT — do what you want with it.
 
 ---
 
-<p align="center"><i>Built from the original Pascal program by MFI Office Services Kft.</i></p>
+<p align="center"><i>Built from the original Pascal program.</i></p>
