@@ -484,6 +484,8 @@ const LANG = {
 
 let currentLang = "hu";
 
+const $ = id => document.getElementById(id);
+
 function setLanguage(lang) {
   if (!LANG[lang]) return;
   currentLang = lang;
@@ -521,8 +523,6 @@ function setLanguage(lang) {
 }
 
 $("langSelector").addEventListener("change", e => setLanguage(e.target.value));
-
-const $ = id => document.getElementById(id);
 
 // ── Password gate ─────────────────────────────────────────────
 
